@@ -20,9 +20,9 @@ Means, if you run `git branch`, its "forwarded" to this application.
 You can do this like following:
 
 Add this line to your e.g. `~/.zshrc` / `~/.bashrc` (depends on which shell you are using)   
-`$REPO_PATH` is the path, of this repo on you local machine.
+`$REPO_PATH` is the path, of this repo on you local machine. (e.g. `/home/user/projects/git-branch-tui`)
 ```
-alias git="if [ \"\$1\" = \"branch\" ]; then $REPO_PATH/git-branch-tui; else command git \"\$@\"; fi"
+alias git="git-branch-switcher() { if [[ \"\$1\" == \"branch\" ]]; then $REPO_PATH/git-branch-tui; else command git \"\$@\"; fi; }; git-branch-switcher"
 ```
 
 Then just restart your terminal emulator, or run `source ~/.zshrc` / `source ~/.bashrc`
