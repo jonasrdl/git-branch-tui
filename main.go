@@ -20,15 +20,24 @@ func main() {
 		return
 	}
 
+	if !isGitRepository(*path) {
+		fmt.Println("Not a Git repository:", *path)
+		return
+	}
+
 	app := tview.NewApplication()
-
 	branchTable := tview.NewTable()
-
 	branches, err := getGitBranches(*path)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
+
+	if len(branches) == 0 {
+		fmt.Println("No branches found in the Git repository:", *path)
+		return
+	}
+
 	for i, branch := range branches {
 		branchTable.SetCell(i, 0, tview.NewTableCell(branch).SetAlign(tview.AlignLeft))
 	}
@@ -107,4 +116,13 @@ func isValidDirectory(path string) bool {
 		return false
 	}
 	return info.IsDir()
+}
+
+func isGitRepository(path string) bool {
+	cmd := exec.Command("git", "rev-parse", "--is-inside-work-tree")
+	cmd.Dir = path
+	if err := cmd.Run(); err != nil {
+		return false
+	}
+	return true
 }
